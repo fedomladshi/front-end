@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
-import { PrivateRoute } from './PrivateRoute'
 
 const Navbar = (props: any) => {
   const authLinks = (
