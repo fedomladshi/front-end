@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { alertType } from "../../../typescript";
+import { alertType } from '../../../appTypes';
 
 const Alert = (props: any) => {
 
   return (
     props.alerts !== null &&
-    props.alerts.length > 0 &&
     props.alerts.map((alert: any) => {
       return (
         <div key={alert.id} className={`alert alert-${alert.alertType}`}>

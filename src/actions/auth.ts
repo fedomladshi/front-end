@@ -1,15 +1,14 @@
 import { setAlert } from "./alert";
+import { REGISTER_SUCCESS, REGISTER_FAIL } from "./types/register";
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT,
-} from "./types";
+  USER_LOADED,
+  AUTH_ERROR,
+} from "./types/login";
+import { LOGOUT } from "./types/logout";
 import axios from "axios";
-import setAuthToken from "../utils/setAuthToken";
+import {setAuthToken, deleteAuthToken} from "../utils/setAuthToken";
 
 //Login User
 export const loginUser = (data: any) => async (dispatch: any) => {
@@ -19,16 +18,14 @@ export const loginUser = (data: any) => async (dispatch: any) => {
     },
   };
   const { email, password } = data;
-  const body = JSON.stringify({ email, password });
+  const body = { email, password };
 
   try {
     const res = await axios.post("/api/auth", body, config);
-
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,
     });
-    dispatch(loadUser());
   } catch (error) {
     const errors = error.response.data;
     dispatch(setAlert(errors, "danger"));
@@ -66,14 +63,16 @@ export const register = (data: any) => async (dispatch: any) => {
     },
   };
   const { name, email, password } = data;
-  const body = JSON.stringify({ name, email, password });
+  const body = { name, email, password };
 
   try {
     const res = await axios.post("/api/users", body, config);
+    console.log('жопа1')
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data,
     });
+    console.log('жопа2')
   } catch (error) {
     const errors = error.response.data;
     dispatch(setAlert(errors, "danger"));

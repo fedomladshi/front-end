@@ -45,14 +45,14 @@ const Register = (props: any) => {
       <p className="lead">
         <i className="fas fa-user"></i> Create Your Account
       </p>
-      <form className="form" onSubmit={(e) => onsubmit(e)}>
+      <form className="form" onSubmit={onsubmit}>
         <div className="form-group">
           <input
             type="text"
             placeholder="Name"
             name="name"
             value={name}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
           />
         </div>
         <div className="form-group">
@@ -60,13 +60,9 @@ const Register = (props: any) => {
             type="text"
             placeholder="Email Address"
             value={email}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
             name="email"
           />
-          <small className="form-text">
-            This site uses Gravatar so if you want a profile image, use a
-            Gravatar email
-          </small>
         </div>
         <div className="form-group">
           <input
@@ -74,7 +70,7 @@ const Register = (props: any) => {
             placeholder="Password"
             name="password"
             value={password}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
           />
         </div>
         <div className="form-group">
@@ -83,7 +79,7 @@ const Register = (props: any) => {
             placeholder="Confirm Password"
             name="password2"
             value={password2}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Register" />

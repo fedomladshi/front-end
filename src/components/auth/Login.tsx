@@ -22,6 +22,7 @@ const Login = (props: any) => {
 
   const onsubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("1")
     props.loginUser({ email, password });
   };
 
@@ -36,19 +37,15 @@ const Login = (props: any) => {
       <p className="lead">
         <i className="fas fa-user"></i> Sign Into Your Account
       </p>
-      <form className="form" onSubmit={(e) => onsubmit(e)}>
+      <form className="form" onSubmit={onsubmit}>
         <div className="form-group">
           <input
             type="email"
             placeholder="Email Address"
             value={email}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
             name="email"
           />
-          <small className="form-text">
-            This site uses Gravatar so if you want a profile image, use a
-            Gravatar email
-          </small>
         </div>
         <div className="form-group">
           <input
@@ -56,7 +53,7 @@ const Login = (props: any) => {
             placeholder="Password"
             name="password"
             value={password}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
             minLength={6}
           />
         </div>
