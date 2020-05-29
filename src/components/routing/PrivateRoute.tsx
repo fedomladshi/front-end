@@ -1,14 +1,15 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import { AppStateType } from "../../store";
+import { IRouteProps } from "../../../appTypes&Interfaces";
 
-const PrivateRoute = ({ component: Component, auth, ...rest }: any) => {
-  console.log(auth.isAuthenticated, auth.loading);
+const PrivateRoute = ({ component: Component, auth, ...rest }: IRouteProps) => {
   return (
     <Route
       {...rest}
       render={(props) => {
-        return !auth.isAuthenticated && !auth.loading ? (
+        return !auth.isAuthenticated && !auth.loading && !auth.user ? (
           <Redirect to="/login" />
         ) : (
           <Component {...props} />
@@ -18,7 +19,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppStateType) => ({
   auth: state.auth,
 });
 export default connect(mapStateToProps)(PrivateRoute);

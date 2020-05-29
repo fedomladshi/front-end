@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
@@ -8,40 +8,36 @@ import Register from "./components/auth/Register";
 import Alert from "./components/layout/Alert";
 import Dashboard from "./components/dashboard/Dashboard";
 // Redux
-import { Provider } from "react-redux";
-import store from "./store";
-import {setAuthToken, deleteAuthToken} from "./utils/setAuthToken";
-import { loadUser } from "./actions/auth";
-import PrivateRoute from './components/routing/PrivateRoute'
+import { connect } from "react-redux";
+import { setAuthToken } from "./utils/setAuthToken";
+import { loadUser } from "./actions/auth.action";
+import PrivateRoute from "./components/routing/PrivateRoute";
+import AudioPage from "./components/audioPage/audioPage";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
-
-const App = () => {
+const App = ({ loadUser }: any) => {
   useEffect(() => {
-    store.dispatch(loadUser());
-  }, []);
+    loadUser();
+  }, [loadUser]);
 
   return (
-    <Provider store={store}>
-      <Router>
-        <Fragment>
-          <Navbar />
-          <Route exact path="/" component={Landing} />
-          {/* <Route exact path="/app" component={Landing2} /> */}
-          <section className="container">
-            <Alert />
-            <Switch>
-              <Route exact path="/Register" component={Register} />
-              <Route exact path="/Login" component={Login} />
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
-            </Switch>
-          </section>
-        </Fragment>
-      </Router>
-    </Provider>
+    <Fragment>
+      <Navbar />
+      <Route exact path="/" component={Landing} />
+      {/* <Route exact path="/app" component={Landing2} /> */}
+      <section className="container">
+        <Alert />
+        <Switch>
+          <Route exact path="/Music" component={AudioPage} />
+          <Route exact path="/Register" component={Register} />
+          <Route exact path="/Login" component={Login} />
+          <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        </Switch>
+      </section>
+    </Fragment>
   );
 };
 
-export default App;
+export default connect(null, { loadUser })(App);

@@ -1,8 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { AppStateType } from "../../store";
+import { authReducerType } from "../../../appTypes&Interfaces";
 
-const Landing = (props: any) => {
+interface ILanding {
+  auth: authReducerType;
+}
+
+const Landing: React.FC<ILanding> = ({auth}) => {
   const buttons = (
     <div className="buttons">
       <Link to="/register" className="btn btn-primary">
@@ -17,11 +23,11 @@ const Landing = (props: any) => {
     <section className="landing">
       <div className="dark-overlay">
         <div className="landing-inner">
-          <h1 className="x-large">Main page</h1>
-          <p className="lead">Authentication practice</p>
-          {!props.auth.loading &&
-            props.auth.isAuthenticated
-              ? `Hello ${props.auth.user.name}`
+          <h1 className="x-large">Welcome to Fyrics</h1>
+          <p className="lead">You'll find all for your ears here</p>
+          {!auth.loading &&
+            auth.isAuthenticated
+              ? `Hello ${auth.user.name}`
               : buttons}
         </div>
       </div>
@@ -29,7 +35,7 @@ const Landing = (props: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppStateType) => ({
   auth: state.auth,
 });
 

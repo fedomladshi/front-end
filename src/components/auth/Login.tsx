@@ -1,73 +1,104 @@
-import React, { Fragment, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Button, Form } from "semantic-ui-react";
 import { Link, Redirect } from "react-router-dom";
-import axios from "axios";
 import { connect } from "react-redux";
-import { loginUser } from "../../actions/auth";
+import { loginUser, register } from "../../actions/auth.action";
+import { AppStateType } from "../../store";
+import { loginFormDataType, userType } from "../../../appTypes&Interfaces";
+import { ModalComponent } from "../modalComponent/modalComponent";
 
-type formDataType = {
-  email: string;
-  password: string;
-};
-const Login = (props: any) => {
-  let setFormInitialState: formDataType = {
+interface ILogin {
+  isAuthenticated: boolean;
+  registrationMessage: boolean;
+  user: userType;
+  loginUser: (obj: loginFormDataType) => void;
+  register: (payload: boolean) => void;
+}
+
+const Login: React.FC<ILogin> = ({
+  isAuthenticated,
+  registrationMessage,
+  user,
+  loginUser,
+  register,
+}) => {
+  let setFormInitialState: loginFormDataType = {
     email: "",
     password: "",
   };
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(setFormInitialState);
 
   const { email, password } = formData;
 
-  const onChange = (e: React.FormEvent<HTMLInputElement>) =>
-    setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onsubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("1")
-    props.loginUser({ email, password });
+    setLoading(true);
+    await loginUser({ email, password });
+    setLoading(false);
   };
 
-  // Redirect of logged in
+  //now you can pass timer to another component
 
-  if (props.isAuthenticated) {
+  // Redirect of logged in
+  useEffect(() => {
+    let timeout: null | NodeJS.Timeout = null;
+    if (registrationMessage) {
+      timeout = setTimeout(() => {
+        register(false);
+      }, 3500);
+    }
+    return () => clearTimeout(timeout!);
+  }, [registrationMessage, register]);
+
+  if (isAuthenticated) {
     return <Redirect to="/dashboard" />;
   }
+
   return (
-    <Fragment>
+    <>
+      {registrationMessage && (
+        <ModalComponent
+          isVisible={registrationMessage}
+          message="User has been successfuly created!"
+        />
+      )}
       <h1 className="large text-primary">Login</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Sign Into Your Account
       </p>
-      <form className="form" onSubmit={onsubmit}>
-        <div className="form-group">
-          <input
-            type="email"
-            placeholder="Email Address"
-            value={email}
-            onChange={onChange}
-            name="email"
-          />
-        </div>
-        <div className="form-group">
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={password}
-            onChange={onChange}
-            minLength={6}
-          />
-        </div>
-        <input type="submit" className="btn btn-primary" value="Login" />
-      </form>
+      <Form loading={loading} onSubmit={onsubmit}>
+        <Form.Input
+          label="Email"
+          placeholder="enter your email"
+          value={email}
+          onChange={onChange}
+          name="email"
+        />
+        <Form.Input
+          label="Password"
+          placeholder="enter your paword"
+          value={password}
+          onChange={onChange}
+          name="password"
+          minLength={6}
+        />
+        <Button>Login</Button>
+      </Form>
       <p className="my-1">
         Don't have an account? <Link to="/register">Sign up</Link>
       </p>
-    </Fragment>
+    </>
   );
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppStateType) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  registrationMessage: state.auth.registrationMessage,
+  user: state.user,
 });
 
-export default connect(mapStateToProps, { loginUser })(Login);
+export default connect(mapStateToProps, { loginUser, register })(Login);

@@ -1,0 +1,7 @@
+.user-status:hover {
+  background-color: #f0f2f5;
+  cursor: pointer;
+}
+.user-status {
+  word-wrap: break-word;
+}
