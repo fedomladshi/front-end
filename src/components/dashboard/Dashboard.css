@@ -1,7 +1,21 @@
-.user-status:hover {
+.dashboard {
+  display: flex;
+}
+.dashboard-main {
+  position: relative;
+}
+
+.dashboard-main__user-status {
+  word-wrap: break-word;
+}
+.dashboard-main__user-status:hover {
   background-color: #f0f2f5;
   cursor: pointer;
 }
-.user-status {
-  word-wrap: break-word;
+
+.dashboard-main__edit-button {
+  position: absolute;
+  width: 30%;
+  bottom: 74px;
+  right: 4px;
 }
