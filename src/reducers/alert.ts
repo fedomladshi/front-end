@@ -1,7 +1,7 @@
-import { alertType } from '../../appTypes&Interfaces';
+import { AlertType } from '../../appTypes&Interfaces';
 import { SET_ALERT, REMOVE_ALERT } from "./../actions/types/alert";
 
-const initialState: Array<alertType> = [];
+const initialState: Array<AlertType> = [];
 
 export default function (state = initialState, action: any) {
   switch (action.type) {

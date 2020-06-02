@@ -47,9 +47,9 @@ const StatusWindow: React.FC<IStatusWindow> = ({
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true)
+    setIsLoading(true);
     await updateUserStatus({ status: inputValue });
-    setIsLoading(false)
+    setIsLoading(false);
     setIsStatusWindow(false);
   };
 
@@ -70,7 +70,9 @@ const StatusWindow: React.FC<IStatusWindow> = ({
           />
         </Form.Field>
         <div className="editor-panel">
-          <Button loading={isLoading} type="submit">Save</Button>
+          <Button loading={isLoading} type="submit">
+            Save
+          </Button>
           <p className="editor-panel__message">
             Left {60 - inputValue.length} symbols
           </p>

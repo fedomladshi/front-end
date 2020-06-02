@@ -4,14 +4,14 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser, register } from "../../actions/auth.action";
 import { AppStateType } from "../../store";
-import { loginFormDataType, userType } from "../../../appTypes&Interfaces";
+import { LoginFormDataType, UserType } from "../../../appTypes&Interfaces";
 import { ModalComponent } from "../modalComponent/modalComponent";
 
 interface ILogin {
   isAuthenticated: boolean;
   registrationMessage: boolean;
-  user: userType;
-  loginUser: (obj: loginFormDataType) => void;
+  user: UserType;
+  loginUser: (obj: LoginFormDataType) => void;
   register: (payload: boolean) => void;
 }
 
@@ -22,9 +22,9 @@ const Login: React.FC<ILogin> = ({
   loginUser,
   register,
 }) => {
-  let setFormInitialState: loginFormDataType = {
-    email: "",
-    password: "",
+  let setFormInitialState: LoginFormDataType = {
+    email: "qwerty@mail.ru",
+    password: "qwerty",
   };
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(setFormInitialState);
@@ -41,9 +41,6 @@ const Login: React.FC<ILogin> = ({
     setLoading(false);
   };
 
-  //now you can pass timer to another component
-
-  // Redirect of logged in
   useEffect(() => {
     let timeout: null | NodeJS.Timeout = null;
     if (registrationMessage) {
@@ -86,7 +83,7 @@ const Login: React.FC<ILogin> = ({
           name="password"
           minLength={6}
         />
-        <Button>Login</Button>
+        <Button primary>Login</Button>
       </Form>
       <p className="my-1">
         Don't have an account? <Link to="/register">Sign up</Link>

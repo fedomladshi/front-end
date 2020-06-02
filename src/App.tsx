@@ -7,6 +7,7 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Alert from "./components/layout/Alert";
 import Dashboard from "./components/dashboard/Dashboard";
+import EditUser from "./components/editUser/EditUser";
 // Redux
 import { connect } from "react-redux";
 import { setAuthToken } from "./utils/setAuthToken";
@@ -14,9 +15,9 @@ import { loadUser } from "./actions/auth.action";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import AudioPage from "./components/audioPage/audioPage";
 
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
-}
+// if (localStorage.token) {
+//   setAuthToken();
+// }
 const App = ({ loadUser }: any) => {
   useEffect(() => {
     loadUser();
@@ -34,6 +35,7 @@ const App = ({ loadUser }: any) => {
           <Route exact path="/Register" component={Register} />
           <Route exact path="/Login" component={Login} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          <PrivateRoute exact path="/edit" component={EditUser} />
         </Switch>
       </section>
     </Fragment>

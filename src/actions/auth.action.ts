@@ -1,4 +1,10 @@
-import { LOAD_USER, EXIT_USER, UPDATE_STATUS } from "./types/user";
+import {
+  LOAD_USER,
+  EXIT_USER,
+  UPDATE_STATUS,
+  UPDATE_AVATAR,
+  DELETE_AVATAR,
+} from "./types/user";
 import axios from "axios";
 import { setAuthToken } from "../utils/setAuthToken";
 import { ThunkAction } from "redux-thunk";
@@ -11,7 +17,7 @@ import {
   AUTH_ERROR,
 } from "./types/login";
 import { LOGOUT } from "./types/logout";
-import { loginFormDataType, userType } from "../../appTypes&Interfaces";
+import { LoginFormDataType, UserType } from "../../appTypes&Interfaces";
 import { setAlert } from "./alert";
 import { Dispatch } from "redux";
 import { REGISTER } from "./types/register";
@@ -23,7 +29,7 @@ type loginSuccessActionType = {
 
 type addUserActionType = {
   type: typeof LOAD_USER;
-  payload: userType;
+  payload: UserType;
 };
 
 type loginFailActionType = {
@@ -36,7 +42,7 @@ type registerActionType = {
 
 type userLoadedActionType = {
   type: typeof USER_LOADED;
-  payload: userType;
+  payload: UserType;
 };
 
 type authErrorActionType = {
@@ -51,8 +57,19 @@ type exitUserActionType = {
 };
 type updateUserStatusType = {
   type: typeof UPDATE_STATUS;
-  payload: userType;
+  payload: UserType;
 };
+
+type updateUserAvatarType = {
+  type: typeof UPDATE_AVATAR;
+  payload: string;
+};
+
+type deleteUserAvatarType = {
+  type: typeof DELETE_AVATAR;
+  payload: string;
+};
+
 export type ActionsTypes =
   | loginSuccessActionType
   | loginFailActionType
@@ -62,10 +79,12 @@ export type ActionsTypes =
   | logoutActionType
   | exitUserActionType
   | addUserActionType
-  | updateUserStatusType;
+  | updateUserStatusType
+  | updateUserAvatarType
+  | deleteUserAvatarType;
 
 export const loginUser = (
-  data: loginFormDataType
+  data: LoginFormDataType
 ): ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes> => async (
   dispatch
 ) => {
@@ -74,6 +93,7 @@ export const loginUser = (
 
   try {
     const res = await axios.post("/api/auth/login", body);
+    localStorage.setItem("token", res.data.token);
     dispatch({
       type: LOAD_USER,
       payload: res.data.user,
@@ -86,6 +106,8 @@ export const loginUser = (
     const errors = error.response.data;
     dispatch(setAlert(errors, "danger"));
 
+    localStorage.removeItem("token");
+
     dispatch({
       type: LOGIN_FAIL,
     });
@@ -94,15 +116,13 @@ export const loginUser = (
 
 export const loadUser = () => async (dispatch: Dispatch) => {
   try {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-      const res = await axios.get("/api/auth");
-      dispatch({
-        type: USER_LOADED,
-        payload: res.data,
-      });
-    }
+    const res = await axios.get("/api/auth");
+    dispatch({
+      type: USER_LOADED,
+      payload: res.data,
+    });
   } catch (error) {
+    localStorage.removeItem("token");
     dispatch({
       type: AUTH_ERROR,
     });
@@ -110,6 +130,7 @@ export const loadUser = () => async (dispatch: Dispatch) => {
 };
 
 export const logout = () => (dispatch: any) => {
+  localStorage.removeItem("token");
   dispatch({ type: LOGOUT });
   dispatch({ type: EXIT_USER });
 };

@@ -35,7 +35,6 @@ export default function (state = initialState, action: ActionsTypes) {
         loading: false,
       };
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", action.payload);
       return {
         ...state,
         token: action.payload,
@@ -45,7 +44,6 @@ export default function (state = initialState, action: ActionsTypes) {
     case LOGIN_FAIL:
     case LOGOUT:
     case AUTH_ERROR:
-      localStorage.removeItem("token");
       return {
         ...state,
         token: null,

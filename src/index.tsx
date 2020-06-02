@@ -6,6 +6,10 @@ import App from "./App";
 import "semantic-ui-css/semantic.min.css";
 import { Provider } from "react-redux";
 import store from "./store";
+
+import { setAuthToken } from "./utils/setAuthToken";
+setAuthToken();
+
 ReactDOM.render(
   <Router>
     <Provider store={store}>

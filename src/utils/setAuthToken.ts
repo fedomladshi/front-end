@@ -1,7 +1,17 @@
 import axios from "axios";
 
-export const setAuthToken = (token: any) => {
-  axios.defaults.headers.common["x-auth-token"] = token;
+export const setAuthToken = () => {
+  axios.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem("token");
+
+      config.headers["x-auth-token"] = token;
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 };
 
 export const deleteAuthToken = () => {

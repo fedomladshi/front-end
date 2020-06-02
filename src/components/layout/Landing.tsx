@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { AppStateType } from "../../store";
-import { authReducerType } from "../../../appTypes&Interfaces";
+import { AuthReducerType } from "../../../appTypes&Interfaces";
 
 interface ILanding {
-  auth: authReducerType;
+  auth: AuthReducerType;
 }
 
 const Landing: React.FC<ILanding> = ({auth}) => {

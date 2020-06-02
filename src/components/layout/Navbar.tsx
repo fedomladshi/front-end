@@ -1,24 +1,26 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth.action";
 import { AppStateType } from "../../store";
-import { authReducerType, userType } from "../../../appTypes&Interfaces";
+import { AuthReducerType, UserType } from "../../../appTypes&Interfaces";
 import { Dropdown } from "semantic-ui-react";
 
 interface ILanding {
-  auth: authReducerType;
-  user: userType;
+  auth: AuthReducerType;
+  user: UserType;
   logout: () => void;
 }
 
 const Navbar: React.FC<ILanding> = ({ auth, user, logout }) => {
+  const history = useHistory();
+
   const authLinks = user && (
     <Dropdown text={user.name}>
       <Dropdown.Menu>
-        <Dropdown.Item text="My profile" />
+        <Dropdown.Item text="My profile" onClick={() => history.push('/dashboard')} />
         <Dropdown.Divider />
-        <Dropdown.Item text="Edit" />
+        <Dropdown.Item text="Edit" onClick={() => history.push('/edit')}/>
         <Dropdown.Divider />
         <Dropdown.Item text="Log out" onClick={logout} />
       </Dropdown.Menu>

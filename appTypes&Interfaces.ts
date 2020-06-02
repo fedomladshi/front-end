@@ -1,33 +1,36 @@
-export type alertType = {
+export type AlertType = {
   msg?: string;
   alertType?: string;
   id?: string;
 };
 
-export type authReducerType = {
+export type AuthReducerType = {
   token: string;
   isAuthenticated: boolean | null;
   loading: boolean;
-  user: userType;
+  user: UserType;
 };
 
-export type userType = {
+export type UserType = {
   id: string;
   name: string;
   email: string;
   avatar: string;
+  gender: string;
+  relationship: string;
+  hometown: string;
   createdAt: string;
   status: string;
 };
 
 export interface IRouteProps {
   component: any;
-  auth: authReducerType;
+  auth: AuthReducerType;
   path: string;
   exact: any;
 }
 
-export type loginFormDataType = {
+export type LoginFormDataType = {
   email: string;
   password: string;
 };

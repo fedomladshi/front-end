@@ -89,7 +89,7 @@ const Register: React.FC<IRegister> = ({ setAlert, register }) => {
           name="password2"
           minLength={6}
         />
-        <Button>Register</Button>
+        <Button primary>Register</Button>
       </Form>
       <p className="my-1">
         Already have an account? <Link to="/login">Sign In</Link>
