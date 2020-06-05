@@ -12,7 +12,7 @@ export type AuthReducerType = {
 };
 
 export type UserType = {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   avatar: string;

@@ -4,10 +4,12 @@ import { AppStateType } from "../../store";
 import { UserType, AuthReducerType } from "../../../appTypes&Interfaces";
 import { Header, Icon, Button, Form } from "semantic-ui-react";
 import "./EditUser.css";
+import { editUser, editUserFormDataType } from "../../actions/user.action";
 
 interface IDashboard {
   user: UserType;
   auth: AuthReducerType;
+  editUser: (obj: editUserFormDataType) => void;
 }
 type formDataType = {
   name: string;
@@ -15,8 +17,10 @@ type formDataType = {
   relationship: string;
   hometown: string;
 };
-const EditUser: React.FC<IDashboard> = ({ user }) => {
+const EditUser: React.FC<IDashboard> = ({ user, editUser }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const genderOptions = [
+    { key: "none", text: "None selected", value: "None selected" },
     { key: "m", text: "Male", value: "male" },
     { key: "f", text: "Female", value: "female" },
   ];
@@ -55,6 +59,13 @@ const EditUser: React.FC<IDashboard> = ({ user }) => {
     });
   };
 
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    await editUser(formData);
+    setIsLoading(false);
+  };
+
   return (
     <>
       <Header as="h2">
@@ -64,25 +75,47 @@ const EditUser: React.FC<IDashboard> = ({ user }) => {
           <Header.Subheader>Manage your basic info</Header.Subheader>
         </Header.Content>
       </Header>
-      <Form loading={false}>
+      <Form loading={isLoading} onSubmit={onSubmitHandler}>
         <Form.Input
           label="Name"
           name="name"
           value={formData.name}
           onChange={onChangeHandler}
         />
-        <Form.Select
-          name="gender"
-          options={genderOptions}
-          value={formData.gender}
-          onChange={onChangeHandler}
-        />
-        <Form.Select
-          name="relationship"
-          options={relationshipOptions}
-          value={formData.relationship}
-          onChange={onChangeHandler}
-        />
+        <div className="field">
+          <label>Gender</label>
+          <select
+            name="gender"
+            className="ui selection dropdown"
+            value={formData.gender}
+            onChange={onChangeHandler}
+          >
+            {genderOptions.map((option) => {
+              return (
+                <option key={option.key} value={option.value}>
+                  {option.text}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="field">
+          <label>Relationship</label>
+          <select
+            name="relationship"
+            className="ui selection dropdown"
+            value={formData.relationship}
+            onChange={onChangeHandler}
+          >
+            {relationshipOptions.map((option) => {
+              return (
+                <option key={option.key} value={option.value}>
+                  {option.text}
+                </option>
+              );
+            })}
+          </select>
+        </div>
         <Form.Input
           label="Hometown"
           name="hometown"
@@ -92,7 +125,6 @@ const EditUser: React.FC<IDashboard> = ({ user }) => {
         <Button>Save</Button>
       </Form>
     </>
-   
   );
 };
 
@@ -100,4 +132,4 @@ const mapStateToProps = (state: AppStateType) => ({
   auth: state.auth,
   user: state.user,
 });
-export default connect(mapStateToProps)(EditUser);
+export default connect(mapStateToProps, { editUser })(EditUser);

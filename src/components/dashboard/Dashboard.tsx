@@ -1,5 +1,4 @@
-import React, { useState, Fragment } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppStateType } from "../../store";
@@ -8,7 +7,6 @@ import { Card, Icon, Image, Button, Modal, Header } from "semantic-ui-react";
 import "./Dashboard.css";
 import StatusWindow from "./statusWindow/statusWindow";
 import { ModalDeleteComponent } from "../modalDeleteComponent/modalDeleteComponent";
-import { setAuthToken } from "../../utils/setAuthToken";
 import { updateUserAvatar, deleteUserAvatar } from "../../actions/user.action";
 
 interface IDashboard {

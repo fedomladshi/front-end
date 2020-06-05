@@ -4,6 +4,7 @@ import {
   UPDATE_STATUS,
   UPDATE_AVATAR,
   DELETE_AVATAR,
+  EDIT_USER,
 } from "./types/user";
 import axios from "axios";
 import { setAuthToken } from "../utils/setAuthToken";
@@ -21,6 +22,7 @@ import { LoginFormDataType, UserType } from "../../appTypes&Interfaces";
 import { setAlert } from "./alert";
 import { Dispatch } from "redux";
 import { REGISTER } from "./types/register";
+import { REMOVE_ALERT } from "./types/alert";
 
 type loginSuccessActionType = {
   type: typeof LOGIN_SUCCESS;
@@ -70,6 +72,11 @@ type deleteUserAvatarType = {
   payload: string;
 };
 
+type editUserActionType = {
+  type: typeof EDIT_USER;
+  payload: UserType;
+};
+
 export type ActionsTypes =
   | loginSuccessActionType
   | loginFailActionType
@@ -81,7 +88,8 @@ export type ActionsTypes =
   | addUserActionType
   | updateUserStatusType
   | updateUserAvatarType
-  | deleteUserAvatarType;
+  | deleteUserAvatarType
+  | editUserActionType;
 
 export const loginUser = (
   data: LoginFormDataType

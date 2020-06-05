@@ -37,8 +37,12 @@ img {
   width: 100%;
 }
 .ui.dropdown .menu {
-  left: -64px !important;
+  left: -30px !important;
   top: 28px !important;
+}
+.ui.segment, .ui.menu {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 /* Utilities */
 .container {
@@ -70,7 +74,7 @@ img {
 }
 
 .text-center {
-  text-aligin: center;
+  text-align: center;
 }
 
 .text-primary {
@@ -194,7 +198,11 @@ img {
   background: var(--danger-color);
   color: #fff;
 }
-
+.navbar__auth-links {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
 .btn-success,
 .bg-success,
 .badge-success,
