@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppStateType } from "../../store";
@@ -121,7 +121,9 @@ const Dashboard: React.FC<IDashboard> = ({ user }) => {
           <Card.Content extra>
             <a>
               <Icon name="user" />
-              22 Friends
+              {user.friends.length === 1
+                ? user.friends.length + "Friend"
+                : user.friends.length + "Friends"}
             </a>
           </Card.Content>
         </Card>

@@ -21,6 +21,7 @@ export type UserType = {
   hometown: string;
   createdAt: string;
   status: string;
+  friends: Array<string>;
 };
 
 export interface IRouteProps {

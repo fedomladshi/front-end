@@ -2,31 +2,30 @@ import React, { useState, useEffect } from "react";
 import {
   Image as ImageComponent,
   Item,
-  Pagination,
   Header,
   Icon,
   Loader,
+  Message,
 } from "semantic-ui-react";
 import axios from "axios";
 import { UserType } from "../../../appTypes&Interfaces";
 import "./Users.css";
 import UsersList from "./usersList/UsersList";
+import { PaginationComponent } from "./pagination/Pagination";
 
 export const Users = () => {
   const [checkedItems, setCheckedItems] = useState<string>("None selected");
   const [users, setUsers] = useState<Array<UserType>>([]);
+  const [paginationRerender, setPaginationRerender] = useState(false);
   const [limit, setLimit] = useState(4);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [usersAmount, setUsersAmount] = useState(0);
   const [pages, setPages] = useState(0);
   const [skip, setSkip] = useState(0);
-  const nextPage = () => {
-    setSkip(skip + limit);
-  };
 
-  const previousPage = () => {
-    setSkip(skip - limit);
-  };
+  useEffect(() => {
+    setPaginationRerender(true);
+  }, [checkedItems]);
 
   useEffect(() => {
     const getUsers = async (limit: number, skip: number) => {
@@ -34,26 +33,18 @@ export const Users = () => {
       const res = await axios.get(
         `/api/users?limit=${limit}&skip=${skip}&gender=${checkedItems}`
       );
-      setSkip(0)
-      setUsers(res.data.users);
-      setPages(res.data.pages);
+
       setUsersAmount(res.data.usersAmount);
+      setPages(res.data.pages);
+      setUsers(res.data.users);
+      if (paginationRerender) {
+        setSkip(0);
+      }
+      setPaginationRerender(false);
       setLoading(false);
     };
     getUsers(limit, skip);
-  }, [skip, limit, checkedItems]);
-
-  const onPaginationHandler = (e: any) => {
-    const value = +e.target.innerHTML;
-    if (!isNaN(value)) {
-      setSkip((value - 1) * limit);
-    }
-    if (e.target.type === "prevItem" && skip !== 0) {
-      previousPage();
-    } else if (e.target.type === "nextItem" && skip + limit !== pages * limit) {
-      nextPage();
-    }
-  };
+  }, [skip, limit, checkedItems, paginationRerender]);
 
   const checkboxes = [
     { name: "None selected", key: "any" },
@@ -88,17 +79,29 @@ export const Users = () => {
           ))}
         </div>
       </Header>
-      <UsersList users={users} loading={loading} />
-      <Pagination
-        onClick={onPaginationHandler}
-        boundaryRange={0}
-        defaultActivePage={1}
-        ellipsisItem={null}
-        firstItem={null}
-        lastItem={null}
-        siblingRange={1}
-        totalPages={pages}
-      />
+      <div className="users-list">
+        {!paginationRerender ? (
+          loading ? (
+            <Loader active inline="centered" />
+          ) : typeof users !== "string" ? (
+            <UsersList users={users} skip={skip} />
+          ) : (
+            <Message floating>{users}</Message>
+          )
+        ) : (
+          ""
+        )}
+      </div>
+      {usersAmount ? (
+        <PaginationComponent
+          setSkip={setSkip}
+          skip={skip}
+          limit={limit}
+          pages={pages}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 };

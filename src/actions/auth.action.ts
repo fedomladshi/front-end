@@ -22,7 +22,6 @@ import { LoginFormDataType, UserType } from "../../appTypes&Interfaces";
 import { setAlert } from "./alert";
 import { Dispatch } from "redux";
 import { REGISTER } from "./types/register";
-import { REMOVE_ALERT } from "./types/alert";
 
 type loginSuccessActionType = {
   type: typeof LOGIN_SUCCESS;

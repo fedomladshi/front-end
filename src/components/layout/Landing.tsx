@@ -3,21 +3,23 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { AppStateType } from "../../store";
 import { AuthReducerType } from "../../../appTypes&Interfaces";
+import { Button } from "semantic-ui-react";
 
 interface ILanding {
   auth: AuthReducerType;
 }
 
-const Landing: React.FC<ILanding> = ({auth}) => {
+const Landing: React.FC<ILanding> = ({ auth }) => {
   const buttons = (
-    <div className="buttons">
-      <Link to="/register" className="btn btn-primary">
-        Sign Up
+    <Button.Group>
+      <Link to="/register">
+        <Button>Sign Up</Button>
       </Link>
-      <Link to="/login" className="btn btn-light">
-        Login
+      <Button.Or />
+      <Link to="/login">
+        <Button positive>Login</Button>
       </Link>
-    </div>
+    </Button.Group>
   );
   return (
     <section className="landing">
@@ -25,10 +27,9 @@ const Landing: React.FC<ILanding> = ({auth}) => {
         <div className="landing-inner">
           <h1 className="x-large">Welcome to Fyrics</h1>
           <p className="lead">You'll find all for your ears here</p>
-          {!auth.loading &&
-            auth.isAuthenticated
-              ? `Hello ${auth.user.name}`
-              : buttons}
+          {!auth.loading && auth.isAuthenticated
+            ? `Hello ${auth.user.name}`
+            : buttons}
         </div>
       </div>
     </section>
