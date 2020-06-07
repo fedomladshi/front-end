@@ -1,6 +1,13 @@
-import { setAlert } from './alert';
+import { setAlert } from "./alert";
 import { ActionsTypes } from "./auth.action";
-import { UPDATE_STATUS, UPDATE_AVATAR, DELETE_AVATAR, EDIT_USER } from "./types/user";
+import {
+  UPDATE_STATUS,
+  UPDATE_AVATAR,
+  DELETE_AVATAR,
+  EDIT_USER,
+  ADD_TO_FRIENDS,
+  REMOVE_FROM_FRIENDS
+} from "./types/user";
 import axios from "axios";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType } from "../store";
@@ -46,8 +53,44 @@ export const editUser = (
     const res = await axios.put("/api/users/edit", data);
     dispatch({
       type: EDIT_USER,
-      payload: res.data.user
-    })
+      payload: res.data.user,
+    });
+    dispatch(setAlert(res.data.msg, "success"));
+  } catch (error) {
+    const errors = error.response.data;
+    dispatch(setAlert(errors, "danger"));
+  }
+};
+
+export const addToFriends = (data: string): ThunkActionType<void> => async (
+  dispatch
+) => {
+  try {
+    const res = await axios.post("/api/users/add-friend", {
+      friendUserId: data,
+    });
+    dispatch({
+      type: ADD_TO_FRIENDS,
+      payload: res.data.friends,
+    });
+    dispatch(setAlert(res.data.msg, "success"));
+  } catch (error) {
+    const errors = error.response.data;
+    dispatch(setAlert(errors, "danger"));
+  }
+};
+
+export const removeFromFriends = (data: string): ThunkActionType<void> => async (
+  dispatch
+) => {
+  try {
+    const res = await axios.post("/api/users/remove-friend", {
+      friendUserId: data,
+    });
+    dispatch({
+      type: REMOVE_FROM_FRIENDS,
+      payload: res.data.friends,
+    });
     dispatch(setAlert(res.data.msg, "success"));
   } catch (error) {
     const errors = error.response.data;

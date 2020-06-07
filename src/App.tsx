@@ -36,7 +36,6 @@ const App: React.FC<IApp> = ({ user, loadUser }) => {
           <Loader inverted content="Loading" />
         </Dimmer>
         <Route exact path="/" component={Landing} />
-        <section className="container">
           <Alert />
           <Switch>
             <Route exact path="/Music" component={AudioPage} />
@@ -46,7 +45,6 @@ const App: React.FC<IApp> = ({ user, loadUser }) => {
             <PrivateRoute exact path="/edit" component={EditUser} />
             <PrivateRoute exact path="/users" component={Users} />
           </Switch>
-        </section>
       </Segment>
     </Fragment>
   );

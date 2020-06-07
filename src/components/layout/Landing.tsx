@@ -23,7 +23,6 @@ const Landing: React.FC<ILanding> = ({ auth }) => {
   );
   return (
     <section className="landing">
-      <div className="dark-overlay">
         <div className="landing-inner">
           <h1 className="x-large">Welcome to Fyrics</h1>
           <p className="lead">You'll find all for your ears here</p>
@@ -31,7 +30,6 @@ const Landing: React.FC<ILanding> = ({ auth }) => {
             ? `Hello ${auth.user.name}`
             : buttons}
         </div>
-      </div>
     </section>
   );
 };

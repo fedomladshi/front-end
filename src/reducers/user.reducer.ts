@@ -3,6 +3,8 @@ import {
   UPDATE_AVATAR,
   DELETE_AVATAR,
   EDIT_USER,
+  ADD_TO_FRIENDS,
+  REMOVE_FROM_FRIENDS,
 } from "./../actions/types/user";
 import { LOAD_USER, EXIT_USER } from "../actions/types/user";
 import { USER_LOADED } from "../actions/types/login";
@@ -13,6 +15,16 @@ const initialState: InitialStateType = {};
 
 export default function (state = initialState, action: ActionsTypes) {
   switch (action.type) {
+    case REMOVE_FROM_FRIENDS:
+      return {
+        ...state,
+        friends: [...action.payload],
+      };
+    case ADD_TO_FRIENDS:
+      return {
+        ...state,
+        friends: [...action.payload],
+      };
     case EDIT_USER:
       return {
         ...action.payload,

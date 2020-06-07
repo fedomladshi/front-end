@@ -9,7 +9,7 @@ interface Props {
 }
 const Alert: React.FC<Props> = ({ alerts }) => {
   return (
-    <Fragment>
+    <section className="alert-container">
       {alerts !== null &&
         alerts.map((alert: AlertType) => {
           return (
@@ -18,7 +18,7 @@ const Alert: React.FC<Props> = ({ alerts }) => {
             </div>
           );
         })}
-    </Fragment>
+    </section>
   );
 };
 

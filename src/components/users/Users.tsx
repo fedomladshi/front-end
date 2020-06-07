@@ -57,7 +57,7 @@ export const Users = () => {
   };
 
   return (
-    <>
+    <section className="container">
       <Header as="h2" icon textAlign="center">
         <Icon name="users" circular />
         <Header.Content>People</Header.Content>
@@ -84,7 +84,7 @@ export const Users = () => {
           loading ? (
             <Loader active inline="centered" />
           ) : typeof users !== "string" ? (
-            <UsersList users={users} skip={skip} />
+            <UsersList users={users} />
           ) : (
             <Message floating>{users}</Message>
           )
@@ -102,6 +102,6 @@ export const Users = () => {
       ) : (
         ""
       )}
-    </>
+    </section>
   );
 };

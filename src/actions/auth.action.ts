@@ -5,9 +5,10 @@ import {
   UPDATE_AVATAR,
   DELETE_AVATAR,
   EDIT_USER,
+  ADD_TO_FRIENDS,
+  REMOVE_FROM_FRIENDS
 } from "./types/user";
 import axios from "axios";
-import { setAuthToken } from "../utils/setAuthToken";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType } from "../store";
 
@@ -75,6 +76,15 @@ type editUserActionType = {
   type: typeof EDIT_USER;
   payload: UserType;
 };
+type addToFriendsActionType = {
+  type: typeof ADD_TO_FRIENDS;
+  payload: Array<UserType>;
+};
+
+type removeFromFriendsActionType = {
+  type: typeof REMOVE_FROM_FRIENDS;
+  payload: Array<UserType>;
+};
 
 export type ActionsTypes =
   | loginSuccessActionType
@@ -88,7 +98,9 @@ export type ActionsTypes =
   | updateUserStatusType
   | updateUserAvatarType
   | deleteUserAvatarType
-  | editUserActionType;
+  | editUserActionType
+  | addToFriendsActionType
+  | removeFromFriendsActionType;
 
 export const loginUser = (
   data: LoginFormDataType

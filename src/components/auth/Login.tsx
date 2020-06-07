@@ -56,7 +56,7 @@ const Login: React.FC<ILogin> = ({
   }
 
   return (
-    <>
+    <section className="container">
       {registrationMessage && (
         <ModalComponent
           isVisible={registrationMessage}
@@ -88,7 +88,7 @@ const Login: React.FC<ILogin> = ({
       <p className="my-1">
         Don't have an account? <Link to="/register">Sign up</Link>
       </p>
-    </>
+    </section>
   );
 };
 

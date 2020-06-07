@@ -67,7 +67,7 @@ const EditUser: React.FC<IDashboard> = ({ user, editUser }) => {
   };
 
   return (
-    <>
+    <section className="container">
       <Header as="h2">
         <Icon name="settings" />
         <Header.Content>
@@ -124,7 +124,7 @@ const EditUser: React.FC<IDashboard> = ({ user, editUser }) => {
         />
         <Button>Save</Button>
       </Form>
-    </>
+    </section>
   );
 };
 

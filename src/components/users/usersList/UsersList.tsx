@@ -1,21 +1,44 @@
 import React from "react";
-import { Item, Button } from "semantic-ui-react";
+import { Item } from "semantic-ui-react";
 import { UserType } from "../../../../appTypes&Interfaces";
 import "./UsersList.css";
 import { AppStateType } from "../../../store";
 import { connect } from "react-redux";
+import { addToFriends, removeFromFriends } from "../../../actions/user.action";
+import { ButtonPanel } from "./buttonPanel/buttonPanel";
 
-type Props = {
+type OwnPropsType = {
   users: Array<UserType>;
-  skip: number;
+};
+type MapStateToPropsType = {
   friends: Array<string>;
 };
+type MapDispatchPropsType = {
+  addToFriends: (id: string) => void;
+  removeFromFriends: (id: string) => void;
+};
 
-const UsersList: React.FC<Props> = ({ users, friends }) => {
-  console.log("friends: ", friends);
+type PropsType = MapStateToPropsType & MapDispatchPropsType & OwnPropsType;
+
+const UsersList: React.FC<PropsType> = ({
+  users,
+  friends,
+  addToFriends,
+  removeFromFriends,
+}) => {
+  const addToFriendsHandler = async (friendId: string) => {
+    await addToFriends(friendId);
+  };
+
+  const removeFromFriendsHandler = async (friendId: string) => {
+
+    await removeFromFriends(friendId);
+  };
+
   return (
     <Item.Group link>
       {users.map((user: UserType) => {
+        const isFriend = friends.find((friend) => friend === user._id);
         return (
           <Item key={user.email} className="user-card">
             <Item.Image size="tiny" src={user.avatar} />
@@ -31,14 +54,23 @@ const UsersList: React.FC<Props> = ({ users, friends }) => {
                 </div>
               </Item.Description>
             </Item.Content>
+
             <Item.Content className="user-card__button">
-              {friends.map((friend) => {
-                return friend === user._id ? (
-                  <Button>Remove from friends</Button>
-                ) : (
-                  <Button>Add to friends</Button>
-                );
-              })}
+              {user._id === isFriend ? (
+                <ButtonPanel
+                  userId={user._id}
+                  text="Remove from friends"
+                  addToFriendsHandler={addToFriendsHandler}
+                  removeFromFriendsHandler={removeFromFriendsHandler}
+                />
+              ) : (
+                <ButtonPanel
+                  userId={user._id}
+                  text="Add to friends"
+                  addToFriendsHandler={addToFriendsHandler}
+                  removeFromFriendsHandler={removeFromFriendsHandler}
+                />
+              )}
             </Item.Content>
           </Item>
         );
@@ -50,4 +82,9 @@ const UsersList: React.FC<Props> = ({ users, friends }) => {
 const mapStateToProps = (state: AppStateType) => ({
   friends: state.user.friends,
 });
-export default connect(mapStateToProps)(UsersList);
+export default connect<
+  MapStateToPropsType,
+  MapDispatchPropsType,
+  OwnPropsType,
+  AppStateType
+>(mapStateToProps, { addToFriends, removeFromFriends })(UsersList);
