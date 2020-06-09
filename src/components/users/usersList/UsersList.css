@@ -1,0 +1,20 @@
+.users-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 35rem;
+  margin: 1rem 0;
+}
+.user-card {
+  padding: 1rem !important;
+  box-shadow: 0 1px 3px 0 #e2e2e2, 0 0 0 1px #e0e0e0 !important;
+}
+.user-card:hover {
+  border-radius: 0.28571429rem !important;
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 10px 1px #d4d4d5 !important;
+}
+div.content.user-card__button {
+  display: flex !important;
+  justify-content: flex-end;
+  align-items: center;
+}

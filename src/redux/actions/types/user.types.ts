@@ -1,0 +1,9 @@
+export const LOAD_USER = 'LOAD_USER';
+export const EXIT_USER = 'EXIT_USER';
+export const UPDATE_STATUS = 'UPDATE_STATUS';
+export const UPDATE_AVATAR = 'UPDATE_AVATAR';
+export const DELETE_AVATAR = 'DELETE_AVATAR';
+export const USER_LOADED = 'USER_LOADED';
+export const EDIT_USER = 'EDIT_USER';
+export const ADD_TO_FRIENDS = 'ADD_TO_FRIENDS';
+export const REMOVE_FROM_FRIENDS = 'REMOVE_FROM_FRIENDS';

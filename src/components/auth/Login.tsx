@@ -1,73 +1,111 @@
-import React, { Fragment, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Button, Form } from "semantic-ui-react";
 import { Link, Redirect } from "react-router-dom";
-import axios from "axios";
 import { connect } from "react-redux";
-import { loginUser } from "../../actions/auth";
+import { loginUser, register } from "../../redux/actions/auth.action";
+import { AppStateType } from "../../redux";
+import { LoginFormDataType, UserType } from "../../../appTypes&Interfaces";
+import { ModalComponent } from "../modalComponent/modalComponent";
+import { loadUser } from "../../redux/actions/user.action";
 
-type formDataType = {
-  email: string;
-  password: string;
-};
-const Login = (props: any) => {
-  let setFormInitialState: formDataType = {
-    email: "",
-    password: "",
+
+type MapStateToProps = {
+  isAuthenticated: boolean;
+  registrationMessage: boolean;
+  user: UserType;
+}
+
+type MapDispatchToProps = {
+  loginUser: (obj: LoginFormDataType) => any;
+  register: (payload: boolean) => void;
+  loadUser: (payload: UserType) => void
+}
+
+type Props = MapStateToProps & MapDispatchToProps;
+
+const Login: React.FC<Props> = ({
+  isAuthenticated,
+  registrationMessage,
+  user,
+  loginUser,
+  register,
+  loadUser
+}) => {
+  let setFormInitialState: LoginFormDataType = {
+    email: "qwerty@mail.ru",
+    password: "qwerty",
   };
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(setFormInitialState);
 
   const { email, password } = formData;
 
-  const onChange = (e: React.FormEvent<HTMLInputElement>) =>
-    setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onsubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("1")
-    props.loginUser({ email, password });
+    setLoading(true);
+    const user = await loginUser({ email, password });
+    loadUser(user);
+    setLoading(false);
   };
 
-  // Redirect of logged in
+  useEffect(() => {
+    let timeout: null | NodeJS.Timeout = null;
+    if (registrationMessage) {
+      timeout = setTimeout(() => {
+        register(false);
+      }, 3500);
+    }
+    return () => clearTimeout(timeout!);
+  }, [registrationMessage, register]);
 
-  if (props.isAuthenticated) {
+  if (isAuthenticated && Object.keys(user).length !== 0) {
     return <Redirect to="/dashboard" />;
   }
+
   return (
-    <Fragment>
+    <section className="container">
+      {registrationMessage && (
+        <ModalComponent
+          isVisible={registrationMessage}
+          message="User has been successfuly created!"
+        />
+      )}
       <h1 className="large text-primary">Login</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Sign Into Your Account
       </p>
-      <form className="form" onSubmit={onsubmit}>
-        <div className="form-group">
-          <input
-            type="email"
-            placeholder="Email Address"
-            value={email}
-            onChange={onChange}
-            name="email"
-          />
-        </div>
-        <div className="form-group">
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={password}
-            onChange={onChange}
-            minLength={6}
-          />
-        </div>
-        <input type="submit" className="btn btn-primary" value="Login" />
-      </form>
+      <Form loading={loading} onSubmit={onsubmit}>
+        <Form.Input
+          label="Email"
+          placeholder="enter your email"
+          value={email}
+          onChange={onChange}
+          name="email"
+        />
+        <Form.Input
+          label="Password"
+          placeholder="enter your paword"
+          value={password}
+          onChange={onChange}
+          name="password"
+          minLength={6}
+        />
+        <Button primary>Login</Button>
+      </Form>
       <p className="my-1">
         Don't have an account? <Link to="/register">Sign up</Link>
       </p>
-    </Fragment>
+    </section>
   );
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppStateType) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  registrationMessage: state.auth.registrationMessage,
+  user: state.user,
 });
 
-export default connect(mapStateToProps, { loginUser })(Login);
+export default connect<MapStateToProps, MapDispatchToProps, {}, AppStateType>(mapStateToProps, { loginUser, register, loadUser })(Login);

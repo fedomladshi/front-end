@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.19.2",
+    "framer-motion": "^1.11.0",
     "moment": "^2.25.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -14,6 +15,8 @@
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.2",
     "typescript": "^3.7.5",
     "uuid": "^8.0.0"
   },

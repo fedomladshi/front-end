@@ -1,0 +1,24 @@
+.editor {
+  position: absolute;
+  border-radius: 2px;
+  background-color: #fafbfc;
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+  padding: 15px;
+  bottom: -40px;
+  z-index: 1;
+  width: 23rem;
+  left: -1rem;
+}
+.ui .card {
+  position: static;
+}
+.editor-input {
+  padding: 0.5rem !important;
+}
+.editor-panel {
+  display: flex;
+  align-items: center;
+}
+.editor-panel__message {
+     margin-left: 1rem;
+}

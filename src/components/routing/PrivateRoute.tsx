@@ -1,9 +1,10 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import { AppStateType } from "../../redux";
+import { IRouteProps } from "../../../appTypes&Interfaces";
 
-const PrivateRoute = ({ component: Component, auth, ...rest }: any) => {
-  console.log(auth.isAuthenticated, auth.loading);
+const PrivateRoute = ({ component: Component, auth, ...rest }: IRouteProps) => {
   return (
     <Route
       {...rest}
@@ -18,7 +19,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  auth: state.auth,
+const mapStateToProps = (state: AppStateType) => ({
+  auth: state.auth
 });
 export default connect(mapStateToProps)(PrivateRoute);

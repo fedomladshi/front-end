@@ -1,19 +1,24 @@
-import React, { useEffect } from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { alertType } from '../../../appTypes';
+import { AlertType } from "../../../appTypes&Interfaces";
+import { AppStateType } from "../../redux";
 
-const Alert = (props: any) => {
-
+interface Props {
+  alerts: Array<AlertType>;
+}
+const Alert: React.FC<Props> = ({ alerts }) => {
   return (
-    props.alerts !== null &&
-    props.alerts.map((alert: any) => {
-      return (
-        <div key={alert.id} className={`alert alert-${alert.alertType}`}>
-          {alert.msg}
-        </div>
-      );
-    })
+    <section className="alert-container">
+      {alerts !== null &&
+        alerts.map((alert: AlertType) => {
+          return (
+            <div key={alert.id} className={`alert alert-${alert.alertType}`}>
+              {alert.msg}
+            </div>
+          );
+        })}
+    </section>
   );
 };
 
@@ -21,7 +26,7 @@ Alert.propTypes = {
   alerts: PropTypes.array.isRequired,
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppStateType) => ({
   alerts: state.alert,
 });
 export default connect(mapStateToProps)(Alert);
