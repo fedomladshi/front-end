@@ -2,9 +2,9 @@ import React from "react";
 import { Item } from "semantic-ui-react";
 import { UserType } from "../../../../appTypes&Interfaces";
 import "./UsersList.css";
-import { AppStateType } from "../../../store";
+import { AppStateType } from "../../../redux";
 import { connect } from "react-redux";
-import { addToFriends, removeFromFriends } from "../../../actions/user.action";
+import { addToFriends, removeFromFriends } from "../../../redux/actions/user.action";
 import { ButtonPanel } from "./buttonPanel/buttonPanel";
 
 type OwnPropsType = {
@@ -31,7 +31,6 @@ const UsersList: React.FC<PropsType> = ({
   };
 
   const removeFromFriendsHandler = async (friendId: string) => {
-
     await removeFromFriends(friendId);
   };
 

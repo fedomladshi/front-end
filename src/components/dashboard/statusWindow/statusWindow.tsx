@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Form, Button } from "semantic-ui-react";
 import "./statusWindow.css";
-import { updateUserStatus } from "../../../actions/user.action";
-import { AppStateType } from "../../../store";
+import { updateUserStatus } from "../../../redux/actions/user.action";
+import { AppStateType } from "../../../redux";
 import { connect } from "react-redux";
-import { updateStatusFormDataType } from "../../../actions/user.action";
+import { updateStatusFormDataType } from "../../../redux/actions/user.action";
 
 interface IStatusWindow {
   status: string;

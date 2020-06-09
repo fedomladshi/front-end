@@ -1,15 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { AppStateType } from "../../store";
-import { AuthReducerType } from "../../../appTypes&Interfaces";
+import { AppStateType } from "../../redux";
+import { AuthReducerType, UserType } from "../../../appTypes&Interfaces";
 import { Button } from "semantic-ui-react";
 
 interface ILanding {
   auth: AuthReducerType;
+  user: UserType
 }
 
-const Landing: React.FC<ILanding> = ({ auth }) => {
+const Landing: React.FC<ILanding> = ({ auth, user }) => {
   const buttons = (
     <Button.Group>
       <Link to="/register">
@@ -25,9 +26,9 @@ const Landing: React.FC<ILanding> = ({ auth }) => {
     <section className="landing">
         <div className="landing-inner">
           <h1 className="x-large">Welcome to Fyrics</h1>
-          <p className="lead">You'll find all for your ears here</p>
+          <p className="lead">You'll find all for you here</p>
           {!auth.loading && auth.isAuthenticated
-            ? `Hello ${auth.user.name}`
+            ? `Hello ${user.name}`
             : buttons}
         </div>
     </section>
@@ -36,6 +37,7 @@ const Landing: React.FC<ILanding> = ({ auth }) => {
 
 const mapStateToProps = (state: AppStateType) => ({
   auth: state.auth,
+  user: state.user
 });
 
 export default connect(mapStateToProps)(Landing);

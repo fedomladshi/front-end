@@ -1,9 +1,9 @@
 import { v4 } from "uuid";
 import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { AppStateType } from "../store";
+import { AppStateType } from "..";
 
-import { SET_ALERT, REMOVE_ALERT } from "./types/alert";
+import { SET_ALERT, REMOVE_ALERT } from "./types/alert.types";
 
 export const setAlert = (
   msg: string,

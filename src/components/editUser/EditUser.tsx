@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { AppStateType } from "../../store";
+import { AppStateType } from "../../redux";
 import { UserType, AuthReducerType } from "../../../appTypes&Interfaces";
 import { Header, Icon, Button, Form } from "semantic-ui-react";
 import "./EditUser.css";
-import { editUser, editUserFormDataType } from "../../actions/user.action";
+import { editUser, editUserFormDataType } from "../../redux/actions/user.action";
 
 interface IDashboard {
   user: UserType;

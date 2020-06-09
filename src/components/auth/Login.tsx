@@ -2,25 +2,34 @@ import React, { useState, useEffect } from "react";
 import { Button, Form } from "semantic-ui-react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { loginUser, register } from "../../actions/auth.action";
-import { AppStateType } from "../../store";
+import { loginUser, register } from "../../redux/actions/auth.action";
+import { AppStateType } from "../../redux";
 import { LoginFormDataType, UserType } from "../../../appTypes&Interfaces";
 import { ModalComponent } from "../modalComponent/modalComponent";
+import { loadUser } from "../../redux/actions/user.action";
 
-interface ILogin {
+
+type MapStateToProps = {
   isAuthenticated: boolean;
   registrationMessage: boolean;
   user: UserType;
-  loginUser: (obj: LoginFormDataType) => void;
-  register: (payload: boolean) => void;
 }
 
-const Login: React.FC<ILogin> = ({
+type MapDispatchToProps = {
+  loginUser: (obj: LoginFormDataType) => any;
+  register: (payload: boolean) => void;
+  loadUser: (payload: UserType) => void
+}
+
+type Props = MapStateToProps & MapDispatchToProps;
+
+const Login: React.FC<Props> = ({
   isAuthenticated,
   registrationMessage,
   user,
   loginUser,
   register,
+  loadUser
 }) => {
   let setFormInitialState: LoginFormDataType = {
     email: "qwerty@mail.ru",
@@ -37,7 +46,8 @@ const Login: React.FC<ILogin> = ({
   const onsubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    await loginUser({ email, password });
+    const user = await loginUser({ email, password });
+    loadUser(user);
     setLoading(false);
   };
 
@@ -51,7 +61,7 @@ const Login: React.FC<ILogin> = ({
     return () => clearTimeout(timeout!);
   }, [registrationMessage, register]);
 
-  if (isAuthenticated) {
+  if (isAuthenticated && Object.keys(user).length !== 0) {
     return <Redirect to="/dashboard" />;
   }
 
@@ -98,4 +108,4 @@ const mapStateToProps = (state: AppStateType) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, { loginUser, register })(Login);
+export default connect<MapStateToProps, MapDispatchToProps, {}, AppStateType>(mapStateToProps, { loginUser, register, loadUser })(Login);

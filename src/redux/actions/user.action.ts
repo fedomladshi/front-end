@@ -1,16 +1,11 @@
-import { setAlert } from "./alert";
-import { ActionsTypes } from "./auth.action";
-import {
-  UPDATE_STATUS,
-  UPDATE_AVATAR,
-  DELETE_AVATAR,
-  EDIT_USER,
-  ADD_TO_FRIENDS,
-  REMOVE_FROM_FRIENDS
-} from "./types/user";
+import { UserType } from "./../../../appTypes&Interfaces";
+import { InferActionsTypes } from "./../reducers/index";
+import { setAlert } from "./alert.action";
+
+import * as usrTs from "./types/user.types";
 import axios from "axios";
 import { ThunkAction } from "redux-thunk";
-import { AppStateType } from "../store";
+import { AppStateType } from "..";
 
 export type updateStatusFormDataType = {
   status: string | undefined;
@@ -24,11 +19,30 @@ export type editUserFormDataType = {
 };
 export type updateAvatarFormDataType = FormData;
 
+export const userActions = {
+  updateStatusAC: (payload: UserType) =>
+    ({ type: usrTs.UPDATE_STATUS, payload } as const),
+  editUserAC: (payload: UserType) =>
+    ({ type: usrTs.EDIT_USER, payload } as const),
+  addToFriendsAC: (payload: Array<UserType>) =>
+    ({ type: usrTs.ADD_TO_FRIENDS, payload } as const),
+  removeFromFriendsAC: (payload: Array<UserType>) =>
+    ({ type: usrTs.REMOVE_FROM_FRIENDS, payload } as const),
+  updateAvatarAC: (payload: string) =>
+    ({ type: usrTs.UPDATE_AVATAR, payload } as const),
+  exitUserAC: () => ({ type: usrTs.EXIT_USER } as const),
+  deleteAvatarAC: (payload: string) =>
+    ({ type: usrTs.DELETE_AVATAR, payload } as const),
+  userLoadedAC: (payload: UserType) =>
+    ({ type: usrTs.USER_LOADED, payload } as const),
+  loadUserAC: (payload: UserType) =>
+    ({ type: usrTs.LOAD_USER, payload } as const),
+};
 type ThunkActionType<T> = ThunkAction<
   Promise<T>,
   AppStateType,
   unknown,
-  ActionsTypes
+  InferActionsTypes<typeof userActions>
 >;
 
 export const updateUserStatus = (
@@ -37,10 +51,7 @@ export const updateUserStatus = (
   const body = { status: data.status };
   try {
     const res = await axios.put("/api/users/status", body);
-    dispatch({
-      type: UPDATE_STATUS,
-      payload: res.data.user,
-    });
+    dispatch(userActions.updateStatusAC(res.data.user));
   } catch (error) {
     console.error(error.response.data);
   }
@@ -51,10 +62,7 @@ export const editUser = (
 ): ThunkActionType<void> => async (dispatch) => {
   try {
     const res = await axios.put("/api/users/edit", data);
-    dispatch({
-      type: EDIT_USER,
-      payload: res.data.user,
-    });
+    dispatch(userActions.editUserAC(res.data.user));
     dispatch(setAlert(res.data.msg, "success"));
   } catch (error) {
     const errors = error.response.data;
@@ -69,10 +77,7 @@ export const addToFriends = (data: string): ThunkActionType<void> => async (
     const res = await axios.post("/api/users/add-friend", {
       friendUserId: data,
     });
-    dispatch({
-      type: ADD_TO_FRIENDS,
-      payload: res.data.friends,
-    });
+    dispatch(userActions.addToFriendsAC(res.data.friends));
     dispatch(setAlert(res.data.msg, "success"));
   } catch (error) {
     const errors = error.response.data;
@@ -80,17 +85,14 @@ export const addToFriends = (data: string): ThunkActionType<void> => async (
   }
 };
 
-export const removeFromFriends = (data: string): ThunkActionType<void> => async (
-  dispatch
-) => {
+export const removeFromFriends = (
+  data: string
+): ThunkActionType<void> => async (dispatch) => {
   try {
     const res = await axios.post("/api/users/remove-friend", {
       friendUserId: data,
     });
-    dispatch({
-      type: REMOVE_FROM_FRIENDS,
-      payload: res.data.friends,
-    });
+    dispatch(userActions.removeFromFriendsAC(res.data.friends));
     dispatch(setAlert(res.data.msg, "success"));
   } catch (error) {
     const errors = error.response.data;
@@ -111,10 +113,7 @@ export const updateUserAvatar = (file: File): ThunkActionType<void> => async (
       },
     });
 
-    dispatch({
-      type: UPDATE_AVATAR,
-      payload: res.data.destination,
-    });
+    dispatch(userActions.updateAvatarAC(res.data.destination));
   } catch (error) {
     console.error(error.response.data);
   }
@@ -126,11 +125,23 @@ export const deleteUserAvatar = (): ThunkActionType<void> => async (
   try {
     const res = await axios.delete("/api/users/avatar");
 
-    dispatch({
-      type: DELETE_AVATAR,
-      payload: res.data.destination,
-    });
+    dispatch(userActions.deleteAvatarAC(res.data.destination));
   } catch (error) {
     console.error(error.response.data);
   }
+};
+
+export const exitUser = (): ThunkActionType<void> => async (dispatch) => {
+  dispatch(userActions.exitUserAC());
+};
+export const userLoaded = (user: UserType): ThunkActionType<void> => async (
+  dispatch
+) => {
+  dispatch(userActions.userLoadedAC(user));
+};
+
+export const loadUser = (user: UserType): ThunkActionType<void> => async (
+  dispatch
+) => {
+  dispatch(userActions.loadUserAC(user));
 };

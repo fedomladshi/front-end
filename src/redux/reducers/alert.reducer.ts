@@ -1,5 +1,5 @@
-import { AlertType } from '../../appTypes&Interfaces';
-import { SET_ALERT, REMOVE_ALERT } from "./../actions/types/alert";
+import { AlertType } from '../../../appTypes&Interfaces';
+import { SET_ALERT, REMOVE_ALERT } from "../actions/types/alert.types";
 
 const initialState: Array<AlertType> = [];
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { AppStateType } from "../../store";
+import { AppStateType } from "../../redux";
 import { IRouteProps } from "../../../appTypes&Interfaces";
 
 const PrivateRoute = ({ component: Component, auth, ...rest }: IRouteProps) => {

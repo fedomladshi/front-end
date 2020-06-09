@@ -11,6 +11,12 @@ export type AuthReducerType = {
   user: UserType;
 };
 
+export type AuthState = {
+  token: string | null;
+  isAuthenticated: any;
+  registrationMessage: boolean;
+  loading: boolean;
+}
 export type UserType = {
   _id: string;
   name: string;
@@ -21,7 +27,7 @@ export type UserType = {
   hometown: string;
   createdAt: string;
   status: string;
-  friends: Array<string>;
+  friends: Array<UserType>;
 };
 
 export interface IRouteProps {

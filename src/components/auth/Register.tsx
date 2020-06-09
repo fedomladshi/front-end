@@ -2,9 +2,9 @@ import React, { Fragment, useState } from "react";
 import { Button, Form } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { register } from '../../actions/auth.action'
-import { setAlert } from "../../actions/alert";
-import { AppStateType } from "../../store";
+import { register } from '../../redux/actions/auth.action'
+import { setAlert } from "../../redux/actions/alert.action";
+import { AppStateType } from "../../redux";
 import axios from "axios";
 
 type formDataType = {

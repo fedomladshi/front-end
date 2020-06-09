@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { AlertType } from "../../../appTypes&Interfaces";
-import { AppStateType } from "../../store";
+import { AppStateType } from "../../redux";
 
 interface Props {
   alerts: Array<AlertType>;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Image as ImageComponent,
-  Item,
   Header,
   Icon,
   Loader,
