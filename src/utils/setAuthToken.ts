@@ -1,11 +1,13 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 export const setAuthToken = () => {
   axios.interceptors.request.use(
-    (config) => {
+    (config: AxiosRequestConfig) => {
       const token = localStorage.getItem("token");
 
-      config.headers["x-auth-token"] = token;
+      if (token) {
+        config.headers.Authorization = `Bearer ${(token)}`;
+      }
       return config;
     },
     (error) => {
