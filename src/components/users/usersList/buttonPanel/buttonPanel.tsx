@@ -2,32 +2,37 @@ import React, { useState } from "react";
 import { Button } from "semantic-ui-react";
 
 type Props = {
+  theme: string;
   text: string;
-  addToFriendsHandler: (id: string) => void;
-  removeFromFriendsHandler: (id: string) => void;
+  sendFriendRequestHandler: (id: string) => void;
+  cancelFriendRequestHandler: (id: string) => void;
   userId: string;
 };
 export const ButtonPanel: React.FC<Props> = ({
+  theme,
   text,
-  addToFriendsHandler,
-  removeFromFriendsHandler,
+  sendFriendRequestHandler,
+  cancelFriendRequestHandler,
   userId,
 }) => {
   const [loading, setLoading] = useState(false);
+  const [buttonTheme, setButtonTheme] = useState(false);
   const [buttonText, setButtonText] = useState(text);
   return (
     <Button
+      primary={!buttonTheme ? (theme === "primary" ? true : false) : true}
       loading={loading}
       onClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (e.currentTarget.name === "Add to friends") {
+        if (e.currentTarget.name === "Add friend") {
           setLoading(true);
-          await addToFriendsHandler(userId);
-          setButtonText("Remove from friends");
+          await sendFriendRequestHandler(userId);
+          setButtonText("Cancel request");
           setLoading(false);
         } else {
           setLoading(true);
-          await removeFromFriendsHandler(userId);
-          setButtonText("Add to friends");
+          await cancelFriendRequestHandler(userId);
+          setButtonTheme(true);
+          setButtonText("Add friend");
           setLoading(false);
         }
       }}

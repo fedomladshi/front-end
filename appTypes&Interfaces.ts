@@ -16,7 +16,7 @@ export type AuthState = {
   isAuthenticated: any;
   registrationMessage: boolean;
   loading: boolean;
-}
+};
 export type UserType = {
   _id: string;
   name: string;
@@ -28,6 +28,13 @@ export type UserType = {
   createdAt: string;
   status: string;
   friends: Array<UserType>;
+};
+
+export type FriendshipType = {
+  _id: string;
+  requester: UserType;
+  recipient: UserType;
+  status: string;
 };
 
 export interface IRouteProps {

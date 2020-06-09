@@ -1,43 +1,67 @@
 import React from "react";
 import { Item } from "semantic-ui-react";
-import { UserType } from "../../../../appTypes&Interfaces";
+import { UserType, FriendshipType } from "../../../../appTypes&Interfaces";
 import "./UsersList.css";
 import { AppStateType } from "../../../redux";
 import { connect } from "react-redux";
-import { addToFriends, removeFromFriends } from "../../../redux/actions/user.action";
 import { ButtonPanel } from "./buttonPanel/buttonPanel";
+import {
+  sendFriendRequest,
+  cancelFriendRequest,
+  getAllFriendships,
+} from "../../../redux/actions/friendship.action";
+import { ButtonPanelToFriendRequest } from "../../buttonPanelToFriendRequest/buttonPanelToFriendRequest";
 
 type OwnPropsType = {
   users: Array<UserType>;
 };
 type MapStateToPropsType = {
-  friends: Array<string>;
+  friendship: Array<FriendshipType>;
+  currentUser: UserType;
 };
 type MapDispatchPropsType = {
-  addToFriends: (id: string) => void;
-  removeFromFriends: (id: string) => void;
+  sendFriendRequest: (friendId: string) => void;
+  cancelFriendRequest: (friendId: string) => void;
+  getAllFriendships: () => void;
 };
 
 type PropsType = MapStateToPropsType & MapDispatchPropsType & OwnPropsType;
 
 const UsersList: React.FC<PropsType> = ({
+  currentUser,
   users,
-  friends,
-  addToFriends,
-  removeFromFriends,
+  friendship,
+  sendFriendRequest,
+  cancelFriendRequest,
+  getAllFriendships,
 }) => {
-  const addToFriendsHandler = async (friendId: string) => {
-    await addToFriends(friendId);
+  const sendFriendRequestHandler = async (friendId: string) => {
+    await sendFriendRequest(friendId);
   };
 
-  const removeFromFriendsHandler = async (friendId: string) => {
-    await removeFromFriends(friendId);
+  const cancelFriendRequestHandler = async (friendId: string) => {
+    await cancelFriendRequest(friendId);
+    await getAllFriendships();
   };
+
+  // const denyFriendRequestHandler = async () => {
+  //   console.log("friendId: ", friendId);
+  // };
+
 
   return (
     <Item.Group link>
       {users.map((user: UserType) => {
-        const isFriend = friends.find((friend) => friend === user._id);
+        const isRequested = friendship.find(
+          ({recipient, requester }) =>
+            recipient._id === user._id &&
+            currentUser._id === requester._id
+        );
+        const isPending = friendship.find(
+          ({recipient, requester }) =>
+            recipient._id === currentUser._id &&
+            user._id === requester._id
+        );
         return (
           <Item key={user.email} className="user-card">
             <Item.Image size="tiny" src={user.avatar} />
@@ -55,19 +79,24 @@ const UsersList: React.FC<PropsType> = ({
             </Item.Content>
 
             <Item.Content className="user-card__button">
-              {user._id === isFriend ? (
+              {isRequested && isRequested.status === "requested" ? (
                 <ButtonPanel
+                  theme="gray"
                   userId={user._id}
-                  text="Remove from friends"
-                  addToFriendsHandler={addToFriendsHandler}
-                  removeFromFriendsHandler={removeFromFriendsHandler}
+                  text="Cancel request"
+                  sendFriendRequestHandler={sendFriendRequestHandler}
+                  cancelFriendRequestHandler={cancelFriendRequestHandler}
                 />
+              ) : isPending && isPending.recipient._id === currentUser._id ? (
+                // <ButtonPanelToFriendRequest denyFriendRequestHandler={denyFriendRequestHandler}/>
+                <div></div>
               ) : (
                 <ButtonPanel
+                  theme="primary"
                   userId={user._id}
-                  text="Add to friends"
-                  addToFriendsHandler={addToFriendsHandler}
-                  removeFromFriendsHandler={removeFromFriendsHandler}
+                  text="Add friend"
+                  sendFriendRequestHandler={sendFriendRequestHandler}
+                  cancelFriendRequestHandler={cancelFriendRequestHandler}
                 />
               )}
             </Item.Content>
@@ -79,11 +108,16 @@ const UsersList: React.FC<PropsType> = ({
 };
 
 const mapStateToProps = (state: AppStateType) => ({
-  friends: state.user.friends,
+  friendship: state.friendship,
+  currentUser: state.user,
 });
 export default connect<
   MapStateToPropsType,
   MapDispatchPropsType,
   OwnPropsType,
   AppStateType
->(mapStateToProps, { addToFriends, removeFromFriends })(UsersList);
+>(mapStateToProps, {
+  sendFriendRequest,
+  cancelFriendRequest,
+  getAllFriendships,
+})(UsersList);

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import PrivateRoute from "./components/routing/PrivateRoute";
-import Navbar from "./components/layout/Navbar";
+import Navbar from "./components/layout/navbar/Navbar";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
@@ -16,6 +16,7 @@ import { AppStateType } from "./redux";
 import "./App.css";
 import { userLoaded } from "./redux/actions/user.action";
 import { UserType } from "../appTypes&Interfaces";
+import {getAllFriendships} from './redux/actions/friendship.action'
 
 type MapStateToProps = {
   user: UserType;
@@ -24,20 +25,22 @@ type MapStateToProps = {
 type MapDispatchToProps = {
   loadUser: () => any;
   userLoaded: (data: UserType) => void;
+  getAllFriendships: () => void
 };
 
 type Props = MapStateToProps & MapDispatchToProps;
 
-const App: React.FC<Props> = ({ user, loadUser, userLoaded }) => {
+const App: React.FC<Props> = ({ user, loadUser, userLoaded, getAllFriendships }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       const data = await loadUser();
-      userLoaded(data);
+      await userLoaded(data);
+      await getAllFriendships()
     })();
     setLoading(false);
-  }, [loadUser, userLoaded]);
+  }, [loadUser, userLoaded, getAllFriendships]);
 
   return (
     <Fragment>
@@ -65,5 +68,5 @@ const mapStateToProps = (state: AppStateType) => ({
 
 export default connect<MapStateToProps, MapDispatchToProps, {}, AppStateType>(
   mapStateToProps,
-  { loadUser, userLoaded }
+  { loadUser, userLoaded, getAllFriendships}
 )(App);

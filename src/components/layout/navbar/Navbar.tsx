@@ -1,11 +1,13 @@
 import React, { Fragment } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import { logout } from "../../redux/actions/auth.action";
-import { exitUser } from "../../redux/actions/user.action";
-import { AppStateType } from "../../redux";
-import { AuthReducerType, UserType } from "../../../appTypes&Interfaces";
+import { logout } from "../../../redux/actions/auth.action";
+import { exitUser } from "../../../redux/actions/user.action";
+import { AppStateType } from "../../../redux";
+import { AuthReducerType, UserType } from "../../../../appTypes&Interfaces";
 import { Dropdown, Menu } from "semantic-ui-react";
+import DropdownFriendRequests from "./friendRequestsList/FriendRequestsList";
+import './Navbar.css'
 
 interface ILanding {
   auth: AuthReducerType;
@@ -19,9 +21,14 @@ const Navbar: React.FC<ILanding> = ({ auth, user, logout, exitUser }) => {
 
   const authLinks = user && (
     <div className="navbar__auth-links">
-      <Menu.Item>
-        <Link to="/users">users</Link>
-      </Menu.Item>
+      <div className="navbar-menu">
+        <Menu.Item>
+          <Link to="/users">users</Link>
+        </Menu.Item>
+        <Menu.Item>
+          <DropdownFriendRequests />
+        </Menu.Item>
+      </div>
       <Menu.Item>
         <Dropdown text={user.name}>
           <Dropdown.Menu>

@@ -1,0 +1,7 @@
+.ui.floating.label {
+     top: 2.5em !important;
+     left: 96% !important;
+}
+.ui.button.dropdown .menu {
+     min-width: max-content !important;
+}
